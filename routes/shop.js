@@ -4,18 +4,13 @@ const app = require("express");
 
 const rootDir = require("../util/path");
 const bodyParser = require("body-parser");
-
-
-const adminRoutes = require("./admin")
-
+const prod = require("../controllers/products");
 const router = app.Router();
 
 router.use(bodyParser.urlencoded({ extended: false }));
 
-let pageName = "Shop";
-let prod = adminRoutes.products;
 router.get("/", (req, res, next) => {
-  res.render("shop", { prod, pageName });
+  res.render("shop", { pro: prod.data, pageName: "Admin" });
 });
 
 module.exports = router;
