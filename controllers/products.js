@@ -1,4 +1,4 @@
-let products = [];
+let Product = require("../models/product");
 
 let getProducts = (req, res, next) => {
   res.render("add-product", {
@@ -7,9 +7,10 @@ let getProducts = (req, res, next) => {
 };
 
 let postProducts = (req, res, next) => {
-  products.push({ title: req.body.title });
-  
+  const newProduct = new Product(req.body.title);
+  newProduct.save();
+
   res.redirect("/");
 };
 
-module.exports = { getProducts, postProducts, data: products };
+module.exports = { getProducts, postProducts, data: Product.fetchall() };
