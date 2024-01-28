@@ -9,14 +9,27 @@ let p = path.join(
 
 let getDataFromFiles = (cb) => {
   fs.readFile(p, (err, data) => {
-    if (err) cb([]);
-    else cb(JSON.parse(data));
+    if (err) {
+      console.error(err);
+      cb([]);
+    } else {
+      try {
+        const jsonData = JSON.parse(data);
+        cb(jsonData);
+      } catch (parseError) {
+        console.error("Error parsing JSON:", parseError);
+        cb([]);
+      }
+    }
   });
 };
 
 class Product {
-  constructor(data) {
-    this.title = data;
+  constructor(title, imageURL, price, description) {
+    this.title = title;
+    this.imageURL = imageURL;
+    this.price = price;
+    this.description = description;
   }
   save() {
     getDataFromFiles((products) => {

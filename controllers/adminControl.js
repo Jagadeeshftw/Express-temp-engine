@@ -7,7 +7,11 @@ let GETProducts = (req, res, next) => {
 };
 
 let POSTProducts = (req, res, next) => {
-  const newProduct = new Product(req.body.title);
+  const title = req.body.title;
+  const imageURL = req.body.imageURL;
+  const price = req.body.price;
+  const description = req.body.description;
+  const newProduct = new Product(title, imageURL, price, description);
   newProduct.save();
 
   res.redirect("/");
@@ -22,5 +26,5 @@ let GETAdminProducts = (req, res, next) => {
 module.exports = {
   GETProducts,
   POSTProducts,
-  GETAdminProducts
+  GETAdminProducts,
 };
