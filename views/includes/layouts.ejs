@@ -15,13 +15,34 @@
       <nav class="main-header__nav">
         <ul class="main-header__item-list">
           <li class="main-header__item">
-            <a class="<%= pageNam==='Admin'?'active':'' %>" href="/">Shop</a>
+            <a class="<%= pageNam==='Index Page'?'active':'' %>" href="/"
+              >Home</a
+            >
           </li>
           <li class="main-header__item">
             <a
               class="<%= pageNam==='Add Product'?'active':'' %>"
               href="/admin/add-product"
               >Add Product</a
+            >
+          </li>
+          <li class="main-header__item">
+            <a
+              class="<%= pageNam==='Admin Products'?'active':'' %>"
+              href="/admin/products"
+              >Admin Products</a
+            >
+          </li>
+          <li class="main-header__item">
+            <a class="<%= pageNam==='My Cart'?'active':'' %>" href="/cart"
+              >Cart</a
+            >
+          </li>
+          <li class="main-header__item">
+            <a
+              class="<%= pageNam==='All Products '?'active':'' %>"
+              href="/products"
+              >All Products</a
             >
           </li>
         </ul>

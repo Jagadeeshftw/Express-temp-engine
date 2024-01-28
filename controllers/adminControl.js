@@ -1,7 +1,7 @@
 let Product = require("../models/product");
 
 let GETProducts = (req, res, next) => {
-  res.render("add-product", {
+  res.render("./admin/add-product", {
     pageName: "Add Product",
   });
 };
@@ -13,8 +13,14 @@ let POSTProducts = (req, res, next) => {
   res.redirect("/");
 };
 
+let GETAdminProducts = (req, res, next) => {
+  Product.fetchall((products) => {
+    res.render("admin/products", { pro: products, pageName: "Admin Products" });
+  });
+};
+
 module.exports = {
   GETProducts,
   POSTProducts,
-
+  GETAdminProducts
 };

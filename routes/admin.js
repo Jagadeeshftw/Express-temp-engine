@@ -4,7 +4,7 @@ const express = require("express");
 
 const rootDir = require("../util/path");
 const bodyParser = require("body-parser");
-const prodControl = require("../controllers/productHandler");
+const prodControl = require("../controllers/adminControl");
 const router = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -16,4 +16,5 @@ router.get("/add-product", prodControl.GETProducts);
 
 router.post("/add-product", prodControl.POSTProducts);
 
+router.get("/products", prodControl.GETAdminProducts);
 module.exports = router;
