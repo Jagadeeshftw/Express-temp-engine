@@ -1,12 +1,12 @@
 let Product = require("../models/product");
 
-let getProducts = (req, res, next) => {
+let GETProducts = (req, res, next) => {
   res.render("add-product", {
     pageName: "Add Product",
   });
 };
 
-let postProducts = (req, res, next) => {
+let POSTProducts = (req, res, next) => {
   const newProduct = new Product(req.body.title);
   newProduct.save();
 
@@ -14,7 +14,7 @@ let postProducts = (req, res, next) => {
 };
 
 module.exports = {
-  getProducts,
-  postProducts,
+  GETProducts,
+  POSTProducts,
 
 };
