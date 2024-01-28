@@ -13,4 +13,8 @@ let postProducts = (req, res, next) => {
   res.redirect("/");
 };
 
-module.exports = { getProducts, postProducts, data: Product.fetchall() };
+module.exports = {
+  getProducts,
+  postProducts,
+
+};
