@@ -1,0 +1,18 @@
+<%- include('../includes/layouts',{ pageNam: pageName}) %>
+
+<main class="centered">
+  <h1><%= pro.title %></h1>
+  <hr />
+  <div class="grid">
+  <article class="card product-item">
+    <div class="card__image">
+      <img src="<%= pro.imageURL %>" alt="<%= pro.title%>" />
+    </div>
+  </article>
+</div>
+
+  <h2><%= pro.price %></h2>
+  <p><%= pro.description %></p>
+</main>
+
+<%- include('../includes/end') %>

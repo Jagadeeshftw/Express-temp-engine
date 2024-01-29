@@ -33,6 +33,7 @@ class Product {
   }
   save() {
     getDataFromFiles((products) => {
+      this.id = Math.random().toString();
       products.push(this);
       fs.writeFile(p, JSON.stringify(products), (err) => {
         console.log(err);
@@ -42,6 +43,14 @@ class Product {
 
   static fetchall(cb) {
     getDataFromFiles(cb);
+  }
+
+  static findById(prodId,cb)
+  {
+      getDataFromFiles((products)=>{
+       let product = products.find(p=> p.id ===prodId);
+       cb(product);
+      })
   }
 }
 

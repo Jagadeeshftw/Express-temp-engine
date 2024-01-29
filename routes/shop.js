@@ -14,6 +14,8 @@ router.get("/", shopControl.GETIndex);
 
 router.get("/products", shopControl.GETProdList);
 
+router.get("/products/:productId", shopControl.GETProdDetails);
+
 router.get("/cart", shopControl.GETCart);
 
 router.get("/orders", shopControl.GETOrders);
