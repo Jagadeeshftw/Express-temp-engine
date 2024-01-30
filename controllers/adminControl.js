@@ -1,5 +1,4 @@
 let Product = require("../models/product");
-
 let GETProducts = (req, res, next) => {
   res.render("./admin/add-product", {
     pageName: "Add Product",

@@ -13,9 +13,11 @@ let getDataFromFiles = (cb) => {
       console.error(err);
       cb([]);
     } else {
+      
       try {
         const jsonData = JSON.parse(data);
         cb(jsonData);
+
       } catch (parseError) {
         console.error("Error parsing JSON:", parseError);
         cb([]);
@@ -36,7 +38,7 @@ class Product {
       this.id = Math.random().toString();
       products.push(this);
       fs.writeFile(p, JSON.stringify(products), (err) => {
-        console.log(err);
+       
       });
     });
   }
@@ -45,13 +47,25 @@ class Product {
     getDataFromFiles(cb);
   }
 
-  static findById(prodId,cb)
-  {
-      getDataFromFiles((products)=>{
-       let product = products.find(p=> p.id ===prodId);
-       cb(product);
-      })
+  static findById(prodId, cb) {
+    getDataFromFiles((products) => {
+      console.log("All products:", products);
+  
+      console.log("Searching for product with ID:", prodId);
+  
+      let product = products.find(p => {
+        console.log("Current product ID:", p.id, "Type:", typeof p.id);
+        console.log("Target product ID:", prodId, "Type:", typeof prodId);
+        return p.id === prodId;
+      });
+  
+      console.log("Found product:", product);
+      
+      cb(product);
+    });
   }
-}
+  
+  }
+
 
 module.exports = Product;
