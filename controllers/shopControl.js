@@ -8,9 +8,12 @@ let GETProdList = (req, res, next) => {
 
 let GETProdDetails = (req, res, next) => {
   let prodId = req.params.productId;
-  Product.findById(prodId,(products)=>{
-    res.render("shop/product-details",{ pro: products, pageName: "Product Details" });
-  })
+  Product.findById(prodId, (products) => {
+    res.render("shop/product-details", {
+      pro: products,
+      pageName: "All Products",
+    });
+  });
 };
 
 let GETIndex = (req, res, next) => {
@@ -35,4 +38,11 @@ let GETCheckout = (req, res, next) => {
     res.render("shop/checkout", { pro: products, pageName: "Checkout" });
   });
 };
-module.exports = { GETProdList, GETIndex ,GETCart, GETCheckout,GETOrders,GETProdDetails};
+module.exports = {
+  GETProdList,
+  GETIndex,
+  GETCart,
+  GETCheckout,
+  GETOrders,
+  GETProdDetails,
+};
