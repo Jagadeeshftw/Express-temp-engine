@@ -28,6 +28,14 @@ let GETCart = (req, res, next) => {
   });
 };
 
+let POSTCart = (req, res, next) => {
+  console.log(req.body.productId);
+  res.redirect("/cart");
+  // Product.fetchall((products) => {
+  //   res.render("shop/cart", { pro: products, pageName: "My Cart" });
+  // });
+};
+
 let GETOrders = (req, res, next) => {
   Product.fetchall((products) => {
     res.render("shop/orders", { pro: products, pageName: "My Orders" });
@@ -45,4 +53,5 @@ module.exports = {
   GETCheckout,
   GETOrders,
   GETProdDetails,
+  POSTCart
 };

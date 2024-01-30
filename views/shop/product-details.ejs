@@ -13,9 +13,7 @@
 
   <h2><%= pro.price %></h2>
   <p><%= pro.description %></p>
-  <form action="/cart">
-    <button class="btn" type="submit">Add to Cart</button>
-  </form>
+  <%- include('../includes/cart',{pro:pro}) %>
 </main>
 
 <%- include('../includes/end') %>
