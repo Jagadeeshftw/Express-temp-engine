@@ -24,8 +24,17 @@ let GETIndex = (req, res, next) => {
 };
 
 let GETCart = (req, res, next) => {
-  Product.fetchall((products) => {
-    res.render("shop/cart", { pro: products, pageName: "My Cart" });
+  Cart.getCart((cart) => {
+    let cartData = [];
+    Product.fetchall((products) => {
+      for (product of products) {
+        let cartProduct = cart.products.find(p => p.id === product.id);
+        if (cart.products.find(p => p.id == product.id)) {
+          cartData.push({ productData: product, qnty: cartProduct.qnty });
+        }
+      }
+      res.render("shop/cart", { cart: cartData, pageName: "My Cart" });
+    });
   });
 };
 
@@ -38,8 +47,9 @@ let POSTCart = (req, res, next) => {
   Product.findById(prodId, (products) => {
     console.log(products);
     Cart.addProduct(prodId, products.price);
+    res.redirect("/cart");
   });
-  res.redirect("/cart");
+ 
 };
 
 let GETOrders = (req, res, next) => {

@@ -66,6 +66,23 @@ class Cart {
       });
     });
   };
+
+  static getCart =(cb)=>
+  {
+    let cart = { products: [], totalPrice: 0 };
+    fs.readFile(p, (err, data) => {
+      if (!err) {
+        try {
+
+          cart = JSON.parse(data);
+          return cb(cart);
+        } catch (parseError) {
+          console.error("Error parsing JSON:", parseError);
+        }
+      }
+    });
+    
+  }
 }
 
 module.exports = Cart;

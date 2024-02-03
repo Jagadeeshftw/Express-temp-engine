@@ -1,3 +1,13 @@
 <%- include('../includes/layouts',{ pageNam: pageName}) %>
 
+<ul>
+    <% if(cart.length >0){%>
+          <%for(c of cart){ %>
+            <li><%= c.productData.title %>(<%= c.qnty %>)</li>
+            <% } %>
+        <%}else{%>
+       <h1>No products added in cart</h1>
+            <%}%>
+</ul>
+
 <%- include('../includes/end') %>
