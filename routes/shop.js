@@ -20,6 +20,8 @@ router.get("/cart", shopControl.GETCart);
 
 router.post("/cart", shopControl.POSTCart);
 
+router.post("/cart_deleteItems", shopControl.POSTCartDeleteItems);
+
 router.get("/orders", shopControl.GETOrders);
 
 router.get("/checkout", shopControl.GETCheckout);

@@ -52,6 +52,9 @@ class Cart {
 
       let existingContentIndex = cart.products.findIndex((p) => p.id == id);
 
+      if(existingContentIndex===-1)
+      return;
+
       let existingContent = cart.products[existingContentIndex];
 
       let existingContentQunty = existingContent.qnty;

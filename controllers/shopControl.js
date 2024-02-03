@@ -39,14 +39,24 @@ let GETCart = (req, res, next) => {
 };
 
 let POSTCart = (req, res, next) => {
-  console.log(req.body.productId);
+
   let prodId = req.body.productId;
-  // Product.fetchall((products) => {
-  //   res.render("shop/cart", { pro: products, pageName: "My Cart" });
-  // });
+
   Product.findById(prodId, (products) => {
-    console.log(products);
+
     Cart.addProduct(prodId, products.price);
+    res.redirect("/cart");
+  });
+ 
+};
+
+let POSTCartDeleteItems = (req, res, next) => {
+
+  let prodId = req.body.productId;
+
+  Product.findById(prodId, (products) => {
+
+    Cart.deleteProduct(prodId,products.price);
     res.redirect("/cart");
   });
  
@@ -70,4 +80,5 @@ module.exports = {
   GETOrders,
   GETProdDetails,
   POSTCart,
+  POSTCartDeleteItems
 };

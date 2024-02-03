@@ -4,10 +4,16 @@
     <% if(cart.length >0){%>
           <%for(c of cart){ %>
             <li><%= c.productData.title %>(<%= c.qnty %>)</li>
+            <form action="/cart_deleteItems" method ="POST">
+                <input type="hidden" name="productId" value="<%=c.productData.id %>">
+                <button class="btn" type="submit">Delete</button>
+            </form>
             <% } %>
+        </ul>
+
         <%}else{%>
        <h1>No products added in cart</h1>
             <%}%>
-</ul>
+
 
 <%- include('../includes/end') %>

@@ -78,9 +78,7 @@ class Product {
         return p.id !== prodId;
       });
       fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
-        console.log("in product.js file");
-        console.log(prodId, prod.price);
-        console.log("completed");
+
         Cart.deleteProduct(prodId, prod.price);
       });
     });
