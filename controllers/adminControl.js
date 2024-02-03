@@ -1,7 +1,9 @@
 let Product = require("../models/product");
 let GETProducts = (req, res, next) => {
-  res.render("./admin/add-product", {
+  res.render("./admin/edit-product", {
     pageName: "Add Product",
+    edit: 0,
+    prod: {},
   });
 };
 
@@ -10,9 +12,45 @@ let POSTProducts = (req, res, next) => {
   const imageURL = req.body.imageURL;
   const price = req.body.price;
   const description = req.body.description;
-  const newProduct = new Product(title, imageURL, price, description);
+  const newProduct = new Product(null,title, imageURL, price, description);
   newProduct.save();
 
+  res.redirect("/");
+};
+
+let GETEditProducts = (req, res, next) => {
+  let prodId = req.params.productId;
+  let editable = req.query.edit;
+  Product.findById(prodId, (product) => {
+    if (!product) {
+      return res.redirect("/");
+    }
+    console.log(product);
+    res.render("./admin/edit-product", {
+      pageName: "Edit Product",
+      edit: editable,
+      prod: product,
+    });
+  });
+};
+
+let POSTEditProducts = (req, res, next) => {
+  let prodId = req.body.productId;
+  let imageURL = req.body.imageURL;
+  let description = req.body.description;
+  let price = req.body.price;
+  let title = req.body.title;
+  console.log("in post edit products");
+  console.log(prodId);
+  res.redirect('/admin/products');
+
+  let updatedProd = new Product(prodId,title,imageURL,price,description);
+  updatedProd.save();
+};
+
+let POSTDeleteProducts = (req, res, next) => {
+  let prodId = req.body.productId;
+  Product.deleteById(prodId);
   res.redirect("/");
 };
 
@@ -26,4 +64,7 @@ module.exports = {
   GETProducts,
   POSTProducts,
   GETAdminProducts,
+  GETEditProducts,
+  POSTEditProducts,
+  POSTDeleteProducts
 };
