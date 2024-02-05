@@ -12,10 +12,19 @@ let POSTProducts = (req, res, next) => {
   const imageURL = req.body.imageURL;
   const price = req.body.price;
   const description = req.body.description;
-  const newProduct = new Product(null,title, imageURL, price, description);
-  newProduct.save();
-
-  res.redirect("/");
+  Product.create({
+    title: title,
+    price: price,
+    description: description,
+    imageURL: imageURL,
+  })
+    .then((result) => {
+      console.log(result);
+      res.redirect("/");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 let GETEditProducts = (req, res, next) => {
@@ -42,9 +51,9 @@ let POSTEditProducts = (req, res, next) => {
   let title = req.body.title;
   console.log("in post edit products");
   console.log(prodId);
-  res.redirect('/admin/products');
+  res.redirect("/admin/products");
 
-  let updatedProd = new Product(prodId,title,imageURL,price,description);
+  let updatedProd = new Product(prodId, title, imageURL, price, description);
   updatedProd.save();
 };
 
@@ -55,9 +64,16 @@ let POSTDeleteProducts = (req, res, next) => {
 };
 
 let GETAdminProducts = (req, res, next) => {
-  Product.fetchall((products) => {
-    res.render("admin/products", { pro: products, pageName: "Admin Products" });
-  });
+  Product.findAll()
+    .then((products) => {
+      res.render("admin/products", {
+        pro: products,
+        pageName: "Admin Products",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 module.exports = {
@@ -66,5 +82,5 @@ module.exports = {
   GETAdminProducts,
   GETEditProducts,
   POSTEditProducts,
-  POSTDeleteProducts
+  POSTDeleteProducts,
 };

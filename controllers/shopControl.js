@@ -2,9 +2,16 @@ const Product = require("../models/product");
 const Cart = require("../models/cart");
 
 let GETProdList = (req, res, next) => {
-  Product.fetchall((products) => {
-    res.render("shop/productList", { pro: products, pageName: "All Products" });
-  });
+  Product.findAll()
+    .then((products) => {
+      res.render("shop/productList", {
+        pro: products,
+        pageName: "All Products",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 let GETProdDetails = (req, res, next) => {
@@ -18,9 +25,13 @@ let GETProdDetails = (req, res, next) => {
 };
 
 let GETIndex = (req, res, next) => {
-  Product.fetchall((products) => {
-    res.render("shop/index", { pro: products, pageName: "Index Page" });
-  });
+  Product.findAll()
+    .then((products) => {
+      res.render("shop/index", { pro: products, pageName: "Index Page" });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 let GETCart = (req, res, next) => {
@@ -28,8 +39,8 @@ let GETCart = (req, res, next) => {
     let cartData = [];
     Product.fetchall((products) => {
       for (product of products) {
-        let cartProduct = cart.products.find(p => p.id === product.id);
-        if (cart.products.find(p => p.id == product.id)) {
+        let cartProduct = cart.products.find((p) => p.id === product.id);
+        if (cart.products.find((p) => p.id == product.id)) {
           cartData.push({ productData: product, qnty: cartProduct.qnty });
         }
       }
@@ -39,27 +50,21 @@ let GETCart = (req, res, next) => {
 };
 
 let POSTCart = (req, res, next) => {
-
   let prodId = req.body.productId;
 
   Product.findById(prodId, (products) => {
-
     Cart.addProduct(prodId, products.price);
     res.redirect("/cart");
   });
- 
 };
 
 let POSTCartDeleteItems = (req, res, next) => {
-
   let prodId = req.body.productId;
 
   Product.findById(prodId, (products) => {
-
-    Cart.deleteProduct(prodId,products.price);
+    Cart.deleteProduct(prodId, products.price);
     res.redirect("/cart");
   });
- 
 };
 
 let GETOrders = (req, res, next) => {
@@ -80,5 +85,5 @@ module.exports = {
   GETOrders,
   GETProdDetails,
   POSTCart,
-  POSTCartDeleteItems
+  POSTCartDeleteItems,
 };

@@ -1,88 +1,31 @@
-const fs = require("fs");
-const path = require("path");
-const Cart = require("./cart");
+const sequelize = require("../util/database");
+const {Sequelize,DataTypes} = require("sequelize");
 
-let p = path.join(
-  path.dirname(process.mainModule.filename),
-  "data",
-  "product.json"
-);
+const Product = sequelize.define('Product', {
+  id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  price: {
+    type: DataTypes.DOUBLE,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  imageURL: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
 
-let getDataFromFiles = (cb) => {
-  fs.readFile(p, (err, data) => {
-    if (err) {
-      console.error(err);
-      cb([]);
-    } else {
-      try {
-        const jsonData = JSON.parse(data);
-        cb(jsonData);
-      } catch (parseError) {
-        console.error("Error parsing JSON:", parseError);
-        cb([]);
-      }
-    }
-  });
-};
-
-class Product {
-  constructor(id, title, imageURL, price, description) {
-    this.id = id;
-    this.title = title;
-    this.imageURL = imageURL;
-    this.price = price;
-    this.description = description;
-  }
-  save() {
-    if (this.id) {
-      getDataFromFiles((products) => {
-        let tempProdIndex = products.findIndex((p) => p.id === this.id);
-        let updatedProd = [...products];
-        updatedProd[tempProdIndex] = this;
-        fs.writeFile(p, JSON.stringify(updatedProd), (err) => {});
-      });
-    } else {
-      getDataFromFiles((products) => {
-        this.id = Math.random().toString();
-        products.push(this);
-        fs.writeFile(p, JSON.stringify(products), (err) => {});
-      });
-    }
-  }
-
-  static fetchall(cb) {
-    getDataFromFiles(cb);
-  }
-
-  static findById(prodId, cb) {
-    getDataFromFiles((products) => {
-      console.log("All products:", products);
-
-      console.log("Searching for product with ID:", prodId);
-
-      let product = products.find((p) => {
-        console.log("Current product ID:", p.id, "Type:", typeof p.id);
-        console.log("Target product ID:", prodId, "Type:", typeof prodId);
-        return p.id === prodId;
-      });
-
-      console.log("Found product:", product);
-
-      cb(product);
-    });
-  }
-  static deleteById(prodId) {
-    getDataFromFiles((products) => {
-      let prod = products.find((p) => p.id === prodId);
-      let updatedProducts = products.filter((p) => {
-        return p.id !== prodId;
-      });
-      fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
-
-        Cart.deleteProduct(prodId, prod.price);
-      });
-    });
-  }
-}
+// Synchronize the model with the database
 
 module.exports = Product;
