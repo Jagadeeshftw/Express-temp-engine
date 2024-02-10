@@ -30,11 +30,11 @@ let POSTProducts = (req, res, next) => {
 let GETEditProducts = (req, res, next) => {
   let prodId = req.params.productId;
   let editable = req.query.edit;
-  Product.findById(prodId, (product) => {
+  console.log("went into geteditprod");
+  Product.findByPk(prodId).then( (product) => {
     if (!product) {
       return res.redirect("/");
     }
-    console.log(product);
     res.render("./admin/edit-product", {
       pageName: "Edit Product",
       edit: editable,
@@ -51,16 +51,32 @@ let POSTEditProducts = (req, res, next) => {
   let title = req.body.title;
   console.log("in post edit products");
   console.log(prodId);
-  res.redirect("/admin/products");
+  Product.findByPk(prodId).then((product)=>{
+  
+    product.imageURL = imageURL;
+    product.description = description;
+    product.price = price;
+    product.title = title;
+    return product.save();
+    
+  }).then((product)=>{
+    res.redirect("/admin/products");
+  });
+  
 
-  let updatedProd = new Product(prodId, title, imageURL, price, description);
-  updatedProd.save();
 };
 
-let POSTDeleteProducts = (req, res, next) => {
+let POSTDeleteProducts =async (req, res, next) => {
   let prodId = req.body.productId;
-  Product.deleteById(prodId);
-  res.redirect("/");
+  Product.findByPk(prodId).then((product)=>{
+
+    return product.destroy();
+    
+    
+  }).then((product)=>{
+    res.redirect("/admin/products");
+  });
+
 };
 
 let GETAdminProducts = (req, res, next) => {
