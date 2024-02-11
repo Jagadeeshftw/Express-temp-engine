@@ -30,7 +30,7 @@ let POSTProducts = (req, res, next) => {
 let GETEditProducts = (req, res, next) => {
   let prodId = req.params.productId;
   let editable = req.query.edit;
-  //console.log("went into geteditprod");
+  console.log("went into geteditprod");
   req.user.getProducts({where:{id:prodId}})
   //Product.findByPk(prodId)
   .then( (product) => {

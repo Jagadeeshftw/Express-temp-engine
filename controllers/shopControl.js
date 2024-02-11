@@ -35,18 +35,12 @@ let GETIndex = (req, res, next) => {
 };
 
 let GETCart = (req, res, next) => {
-  Cart.getCart((cart) => {
-    let cartData = [];
-    Product.fetchall((products) => {
-      for (product of products) {
-        let cartProduct = cart.products.find((p) => p.id === product.id);
-        if (cart.products.find((p) => p.id == product.id)) {
-          cartData.push({ productData: product, qnty: cartProduct.qnty });
-        }
-      }
-      res.render("shop/cart", { cart: cartData, pageName: "My Cart" });
-    });
-  });
+
+      req.user.getCart().then((cart)=>{
+        return cart.getProducts();
+      }).then((products)=>{
+        res.render("shop/cart", { cart: [], pageName: "My Cart", products: products});
+      });
 };
 
 let POSTCart = (req, res, next) => {
