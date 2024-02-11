@@ -12,7 +12,7 @@ let POSTProducts = (req, res, next) => {
   const imageURL = req.body.imageURL;
   const price = req.body.price;
   const description = req.body.description;
-  Product.create({
+  req.user.createProduct({
     title: title,
     price: price,
     description: description,
@@ -30,15 +30,19 @@ let POSTProducts = (req, res, next) => {
 let GETEditProducts = (req, res, next) => {
   let prodId = req.params.productId;
   let editable = req.query.edit;
-  console.log("went into geteditprod");
-  Product.findByPk(prodId).then( (product) => {
-    if (!product) {
+  //console.log("went into geteditprod");
+  req.user.getProducts({where:{id:prodId}})
+  //Product.findByPk(prodId)
+  .then( (product) => {
+   // console.log("printing product");
+   // console.log(product);
+    if (!product[0]) {
       return res.redirect("/");
     }
     res.render("./admin/edit-product", {
       pageName: "Edit Product",
       edit: editable,
-      prod: product,
+      prod: product[0],
     });
   });
 };
@@ -49,10 +53,9 @@ let POSTEditProducts = (req, res, next) => {
   let description = req.body.description;
   let price = req.body.price;
   let title = req.body.title;
-  console.log("in post edit products");
-  console.log(prodId);
-  Product.findByPk(prodId).then((product)=>{
-  
+
+  req.user.getProducts({where:{id:prodId}}).then((products)=>{
+    let product = products[0];
     product.imageURL = imageURL;
     product.description = description;
     product.price = price;
@@ -68,9 +71,9 @@ let POSTEditProducts = (req, res, next) => {
 
 let POSTDeleteProducts =async (req, res, next) => {
   let prodId = req.body.productId;
-  Product.findByPk(prodId).then((product)=>{
+  req.user.getProducts({where:{id:prodId}}).then((product)=>{
 
-    return product.destroy();
+    return product[0].destroy();
     
     
   }).then((product)=>{
@@ -80,7 +83,7 @@ let POSTDeleteProducts =async (req, res, next) => {
 };
 
 let GETAdminProducts = (req, res, next) => {
-  Product.findAll()
+  req.user.getProducts()
     .then((products) => {
       res.render("admin/products", {
         pro: products,
