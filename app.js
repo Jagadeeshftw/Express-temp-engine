@@ -12,6 +12,8 @@ const shopRoutes = require("./routes/shop");
 const sequelize = require("./util/database");
 const Product = require("./models/product");
 const User = require("./models/user");
+const Cart = require("./models/cart");
+const CartItems = require("./models/cart-items");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -44,8 +46,12 @@ Product.belongsTo(User, {
 });
 
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product,{through: CartItems});
+Product.belongsToMany(Cart,{through: CartItems});
 sequelize
-  .sync()
+  .sync({force:true})
   .then((result) => {
     return User.findByPk(1);
   }).then((user)=>{
