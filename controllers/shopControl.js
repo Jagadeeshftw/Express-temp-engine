@@ -35,31 +35,69 @@ let GETIndex = (req, res, next) => {
 };
 
 let GETCart = (req, res, next) => {
-
-      req.user.getCart().then((cart)=>{
-        return cart.getProducts();
-      }).then((products)=>{
-        res.render("shop/cart", { cart: [], pageName: "My Cart", products: products});
+  req.user
+    .getCart()
+    .then((cart) => {
+      return cart.getProducts();
+    })
+    .then((products) => {
+      console.log("printing all the products");
+      console.log(products);
+      res.render("shop/cart", {
+        pageName: "My Cart",
+        products: products,
       });
+    });
 };
 
 let POSTCart = (req, res, next) => {
   let prodId = req.body.productId;
+  let fetchedCart;
+  let newQuantity = 1;
 
-  Product.findById(prodId, (products) => {
-    Cart.addProduct(prodId, products.price);
-    res.redirect("/cart");
-  });
+  req.user
+    .getCart()
+    .then((cart) => {
+      fetchedCart = cart;
+      return cart.getProducts({ where: { id: prodId } }).then((products) => {
+        let product = products[0];
+        
+        if (products.length > 0) {
+          let oldQuantity = product.cartItems.quantity;
+          newQuantity = newQuantity + oldQuantity;
+        }
+        return Product.findByPk(prodId).then((product) => {
+          return fetchedCart.addProduct(product, {
+            through: { quantity: newQuantity },
+          });
+        });
+      });
+    })
+    .then((cart) => {
+      res.redirect("/cart");
+    });
 };
 
 let POSTCartDeleteItems = (req, res, next) => {
   let prodId = req.body.productId;
 
-  Product.findById(prodId, (products) => {
-    Cart.deleteProduct(prodId, products.price);
-    res.redirect("/cart");
-  });
-};
+  req.user
+    .getCart()
+    .then((cart) => {
+      fetchedCart = cart;
+      return cart.getProducts({ where: { id: prodId } }).then((products) => {
+        let product = products[0];
+        return product.cartItems.destroy();
+      });
+    })
+    .then((cart) => {
+      console.log("printing all products in cart");
+      console.log(cart);
+      res.redirect("/cart");
+    });
+
+
+  }
 
 let GETOrders = (req, res, next) => {
   Product.fetchall((products) => {
