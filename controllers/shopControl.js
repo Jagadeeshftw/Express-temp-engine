@@ -61,7 +61,7 @@ let POSTCart = (req, res, next) => {
       fetchedCart = cart;
       return cart.getProducts({ where: { id: prodId } }).then((products) => {
         let product = products[0];
-        
+
         if (products.length > 0) {
           let oldQuantity = product.cartItems.quantity;
           newQuantity = newQuantity + oldQuantity;
@@ -95,14 +95,50 @@ let POSTCartDeleteItems = (req, res, next) => {
       console.log(cart);
       res.redirect("/cart");
     });
-
-
-  }
+};
 
 let GETOrders = (req, res, next) => {
-  Product.fetchall((products) => {
-    res.render("shop/orders", { pro: products, pageName: "My Orders" });
-  });
+  req.user
+    .getOrder()
+    .then((order) => {
+      console.log("orders in get")
+      console.log(order);
+      return order.getProducts();
+    })
+    .then((products) => {
+      console.log("my products");
+      console.log(products);
+      res.render("shop/orders", { products: products, pageName: "My Orders" });
+    });
+};
+
+let POSTOrders = (req, res, next) => {
+  let fetchedCart;
+  req.user
+    .getCart()
+    .then((cart) => {
+      fetchedCart = cart;
+      return cart.getProducts();
+    })
+    .then((products) => {
+      console.log("printing all the available products");
+      console.log(products);
+      return req.user.createOrder().then((order) => {
+        let modifiedProducts = products.map((product) => {
+          product.orderItems = { quantity: product.cartItems.quantity };
+          return product;
+        });
+        return order.addProducts(modifiedProducts);
+      });
+    })
+    .then((order) => {
+      console.log("printing orders")
+      console.log(order);
+      return fetchedCart.setProducts(null);
+    })
+    .then((order) => {
+      res.redirect("/orders");
+    });
 };
 let GETCheckout = (req, res, next) => {
   Product.fetchall((products) => {
@@ -117,5 +153,6 @@ module.exports = {
   GETOrders,
   GETProdDetails,
   POSTCart,
+  POSTOrders,
   POSTCartDeleteItems,
 };

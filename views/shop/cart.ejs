@@ -1,19 +1,21 @@
 <%- include('../includes/layouts',{ pageNam: pageName}) %>
+<div class="centered">
+  <% if(products.length >0){%> <%for(prod of products){ %>
+  <h3><%= prod.title %>(<%= prod.cartItems.quantity %>)</h3>
+  <form action="/cart_deleteItems" method="POST">
+    <input type="hidden" name="productId" value="<%=prod.id %>" />
+    <button class="btn" type="submit">Delete</button>
+  </form>
+  <% } %>
+</div>
+<hr>
+<div class="centered">
+  <form action="/orders" method="POST">
 
-<ul>
-    <% if(products.length >0){%>
-          <%for(prod of products){ %>
-            <li><%= prod.title %>(<%= prod.cartItems.quantity %>)</li>
-            <form action="/cart_deleteItems" method ="POST">
-                <input type="hidden" name="productId" value="<%=prod.id %>">
-                <button class="btn" type="submit">Delete</button>
-            </form>
-            <% } %>
-        </ul>
+    <button class="btn" type="submit">Order now</button>
+  </form>
+</div>
 
-        <%}else{%>
-       <h1>No products added in cart</h1>
-            <%}%>
-
-
-<%- include('../includes/end') %>
+<%}else{%>
+<h1>No products added in cart</h1>
+<%}%> <%- include('../includes/end') %>
